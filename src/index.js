@@ -3,14 +3,23 @@ import ReactDOM from "react-dom";
 import "./styles/styles.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+//appolo gql
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./gql/client";
+//redux
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import appReducer from "./store/appReducer";
+
+const store = createStore(appReducer);
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
