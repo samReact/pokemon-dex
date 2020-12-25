@@ -1,0 +1,15 @@
+.content-padding {
+  padding: 0px 50px;
+}
+
+@media screen and (max-width: map-get($breakpoints, "md")) {
+  .content-padding {
+    padding: 0px 40px;
+  }
+}
+
+@media screen and (max-width: map-get($breakpoints, "sm")) {
+  .content-padding {
+    padding: 0px 20px;
+  }
+}

@@ -6,7 +6,7 @@ import FightButton from '../components/FightButton';
 const Header = () => {
 
   return (
-    <div className='header'>
+    <div className='header content-padding'>
       <img src={logo} alt="pokemon logo" />
       <FightButton />
     </div>

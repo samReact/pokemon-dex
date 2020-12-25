@@ -5,6 +5,7 @@ export const POKEMONS = gql`
     pokemons(first: 151) {
       id
       name
+      image
     }
   }
 `;

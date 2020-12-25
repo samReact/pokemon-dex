@@ -1,2 +1,12 @@
+@use "sass:map";
+
 $primary: #fcd304;
 $secondary: #110e25;
+$lightGray: #f2f2f2;
+
+$breakpoints: (
+  "lg": 992px,
+  "md": 768px,
+  "sm": 576px,
+  "xs": 375px,
+);
