@@ -1,9 +1,17 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
+import {TOGGLE_DRAWER} from '../store/appActions';
 
 const PokemonCard = ({pokemon}) => {
   const {image, name} = pokemon;
+  const dispatch = useDispatch();
+
+  const handleClick = () => {
+    dispatch({type: TOGGLE_DRAWER, payload: true});
+  };
+
   return (
-    <div className="pokemon-card">
+    <div className="pokemon-card" onClick={handleClick}>
       <div className="image-container">
         <img src={image} alt={name} className='image' />
       </div>

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 
 import SearchInput from '../components/SearchInput';
+import Drawer from '../parts/Drawer';
 import Header from '../parts/Header';
 import PokemonCard from '../parts/PokemonCard';
 
@@ -32,6 +33,7 @@ const Home = () => {
   return (
     <div className='home'>
       <Header />
+      <Drawer />
       <div className='home-content content-padding'>
         <div className='home-search'>
           <SearchInput placeholder={'Search by name'} value={value} onChange={handleChange} onClick={handleReset} />

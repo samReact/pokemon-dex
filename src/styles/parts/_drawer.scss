@@ -1,0 +1,29 @@
+.drawer {
+  height: 100%;
+  width: 0px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: $secondary;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  &.-open {
+    width: 30%;
+  }
+  .closebtn {
+    position: absolute;
+    top: 0;
+    left: 25px;
+    font-size: 36px;
+    color: $primary;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-height: 450px) {
+  .drawer {
+    padding-top: 15px;
+  }
+}

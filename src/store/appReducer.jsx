@@ -1,7 +1,8 @@
-import {ADD_POKEMONS} from './appActions';
+import {ADD_POKEMONS, TOGGLE_DRAWER} from './appActions';
 
 const initialState = {
-  pokemons: []
+  pokemons: [],
+  isDrawerOpen: false
 };
 
 export default function appReducer(state = initialState, action) {
@@ -10,6 +11,11 @@ export default function appReducer(state = initialState, action) {
       return {
         ...state,
         pokemons: action.payload
+      };
+    case TOGGLE_DRAWER:
+      return {
+        ...state,
+        isDrawerOpen: action.payload
       };
     default:
       return state;
