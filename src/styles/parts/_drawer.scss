@@ -10,15 +10,27 @@
   transition: 0.5s;
   padding-top: 60px;
   &.-open {
-    width: 30%;
+    width: 300px;
   }
   .closebtn {
     position: absolute;
     top: 0;
-    left: 25px;
     font-size: 36px;
     color: $primary;
     cursor: pointer;
+  }
+  .drawer-content {
+    padding: 16px;
+
+    .drawer-image-container {
+      background-color: #fff;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      height: 300px;
+      border-radius: 16px;
+      padding: 12px;
+    }
   }
 }
 

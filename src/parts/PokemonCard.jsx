@@ -7,7 +7,7 @@ const PokemonCard = ({pokemon}) => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch({type: TOGGLE_DRAWER, payload: true});
+    dispatch({type: TOGGLE_DRAWER, payload: {isDrawerOpen: true, pokemon}});
   };
 
   return (
