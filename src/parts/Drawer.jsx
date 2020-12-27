@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {TOGGLE_DRAWER} from '../store/appActions';
+import {TOGGLE_DRAWER, UPDATE_TEAM} from '../store/appActions';
 
 import {useQuery} from "@apollo/client";
 import {POKEMON} from '../gql/queries';
 import Pills from '../components/Pills';
+import CustomButton from '../components/CustomButton';
 
 const Drawer = () => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
-  const {isDrawerOpen, pokemon, pokemons} = state;
+  const {isDrawerOpen, pokemon, pokemons, myTeam} = state;
 
   const [evolutionsPokemon, setEvolutionsPokemon] = useState([]);
 
@@ -58,6 +59,31 @@ const Drawer = () => {
     );
   };
 
+  const handleAddToTeam = (pokemon) => {
+    console.log(pokemon);
+    const attacks = pokemon.attacks;
+    const specialAttacks = attacks.special;
+    const fastAttacks = attacks.fast;
+    const attacksNumber = fastAttacks.length + specialAttacks.length;
+    if (attacksNumber > 4) {
+      return alert('This pokeman can\'t fight he has more than 4 attacks !!');
+    }
+    if (specialAttacks.length < 1 | fastAttacks.length < 1) {
+      return alert('This pokeman can\'t fight he must has at least 1 fast attack and 1 special attack !!');
+    }
+    let updatedTeam = myTeam;
+    updatedTeam.push(pokemon.id);
+    dispatch({type: UPDATE_TEAM, payload: updatedTeam});
+    alert('Added !');
+  };
+
+  const handleRemoveFromTeam = (id) => {
+    let updatedTeam = myTeam.filter(pokemonId => pokemonId !== id);
+    dispatch({type: UPDATE_TEAM, payload: updatedTeam});
+    alert('Removed !');
+
+  };
+
   return (
     <div className={classname} >
       <div className="drawer-content">
@@ -95,6 +121,14 @@ const Drawer = () => {
                   </div>
                 </div>
               }
+              <div style={{marginTop: 16}}>
+                {myTeam.includes(fetchedPokemon.id) ?
+                  <CustomButton title={"Remove from my team"} type="danger" onClick={() => handleRemoveFromTeam(fetchedPokemon.id)} block />
+                  :
+                  <CustomButton title={"Add to my team"} type="success" onClick={() => handleAddToTeam(fetchedPokemon)} block disabled={myTeam.length >= 5} />
+                }
+              </div>
+
             </div>
         }
       </div>

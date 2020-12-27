@@ -8,7 +8,10 @@ import PokemonCard from '../parts/PokemonCard';
 
 const Home = () => {
 
-  const allPokemons = useSelector(state => state.pokemons);
+  const state = useSelector(state => state);
+  const allPokemons = state.pokemons;
+  const {myTeam} = state;
+
   const [pokemons, setPokemons] = useState([]);
   const [value, setValue] = useState('');
 
@@ -32,7 +35,7 @@ const Home = () => {
 
   return (
     <div className='home'>
-      <Header />
+      <Header myTeam={myTeam} />
       <Drawer />
       <div className='home-content content-padding'>
         <div className='home-search'>
@@ -42,7 +45,7 @@ const Home = () => {
           {pokemons.length > 0 ?
             pokemons.map(pokemon => {
               return (
-                <PokemonCard key={pokemon.id} pokemon={pokemon} />
+                <PokemonCard key={pokemon.id} pokemon={pokemon} myTeam={myTeam} />
               );
             })
             :
