@@ -60,7 +60,6 @@ const Drawer = () => {
   };
 
   const handleAddToTeam = (pokemon) => {
-    console.log(pokemon);
     const attacks = pokemon.attacks;
     const specialAttacks = attacks.special;
     const fastAttacks = attacks.fast;
