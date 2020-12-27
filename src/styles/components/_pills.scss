@@ -1,0 +1,85 @@
+.pills {
+  font-size: 11px;
+  padding: 2px 12px;
+  border-radius: 6px;
+  margin: 8px 0px 0px 8px;
+  background: linear-gradient(180deg, #a4acaf 50%, #a4acaf 50%);
+  background-color: #a4acaf;
+  color: $textSecondary;
+
+  &.-Electric {
+    background: linear-gradient(180deg, #eed535 50%, #eed535 50%);
+    background-color: #eed535;
+    color: $textSecondary;
+  }
+  &.-Ice {
+    background: linear-gradient(180deg, #51c4e7 50%, #51c4e7 50%);
+    background-color: #51c4e7;
+    color: $textSecondary;
+  }
+  &.-Psychic {
+    background: linear-gradient(180deg, #f366b9 50%, #f366b9 50%);
+    background-color: #f366b9;
+    color: $white;
+  }
+  &.-Flying {
+    background: linear-gradient(180deg, #3dc7ef 50%, #bdb9b8 50%);
+    background-color: #3dc7ef;
+    color: $textSecondary;
+  }
+  &.-Fire {
+    background: linear-gradient(180deg, #fd7d24 50%, #fd7d24 50%);
+    background-color: #fd7d24;
+    color: $white;
+  }
+  &.-Grass {
+    background: linear-gradient(180deg, #9bcc50 50%, #9bcc50 50%);
+    background-color: #9bcc50;
+    color: $textSecondary;
+  }
+  &.-Rock {
+    background: linear-gradient(180deg, #a38c21 50%, #a38c21 50%);
+    background-color: #a38c21;
+    color: $white;
+  }
+  &.-Ground {
+    background: linear-gradient(180deg, #f7de3f 50%, #ab9842 50%);
+    background-color: #f7de3f;
+    color: $textSecondary;
+  }
+  &.-Water {
+    background: linear-gradient(180deg, #4592c4 50%, #4592c4 50%);
+    background-color: #4592c4;
+    color: $white;
+  }
+  &.-Poison {
+    background: linear-gradient(180deg, #b97fc9 50%, #b97fc9 50%);
+    background-color: #b97fc9;
+    color: $white;
+  }
+  &.-Bug {
+    background: linear-gradient(180deg, #729f3f 50%, #729f3f 50%);
+    background-color: #729f3f;
+    color: $white;
+  }
+  &.-Fairy {
+    background: linear-gradient(180deg, #fdb9e9 50%, #fdb9e9 50%);
+    background-color: #fdb9e9;
+    color: $textSecondary;
+  }
+  &.-Dark {
+    background: linear-gradient(180deg, #707070 50%, #707070 50%);
+    background-color: #707070;
+    color: $white;
+  }
+  &.-Ghost {
+    background: linear-gradient(180deg, #7b62a3 50%, #7b62a3 50%);
+    background-color: #7b62a3;
+    color: $white;
+  }
+  &.-Fighting {
+    background: linear-gradient(180deg, #d56723 50%, #d56723 50%);
+    background-color: #d56723;
+    color: $white;
+  }
+}
