@@ -60,24 +60,24 @@ const Drawer = () => {
   };
 
   const handleAddToTeam = (pokemon) => {
-    const attacks = pokemon.attacks;
-    const specialAttacks = attacks.special;
-    const fastAttacks = attacks.fast;
-    const attacksNumber = fastAttacks.length + specialAttacks.length;
-    if (attacksNumber > 4) {
-      return alert('This pokeman can\'t fight he has more than 4 attacks !!');
-    }
-    if (specialAttacks.length < 1 | fastAttacks.length < 1) {
-      return alert('This pokeman can\'t fight he must has at least 1 fast attack and 1 special attack !!');
-    }
+    // const attacks = pokemon.attacks;
+    // const specialAttacks = attacks.special;
+    // const fastAttacks = attacks.fast;
+    // const attacksNumber = fastAttacks.length + specialAttacks.length;
+    // if (attacksNumber > 4) {
+    //   return alert('This pokeman can\'t fight he has more than 4 attacks !!');
+    // }
+    // if (specialAttacks.length < 1 | fastAttacks.length < 1) {
+    //   return alert('This pokeman can\'t fight he must has at least 1 fast attack and 1 special attack !!');
+    // }
     let updatedTeam = myTeam;
-    updatedTeam.push(pokemon.id);
+    updatedTeam.push(pokemon);
     dispatch({type: UPDATE_TEAM, payload: updatedTeam});
     alert('Added !');
   };
 
   const handleRemoveFromTeam = (id) => {
-    let updatedTeam = myTeam.filter(pokemonId => pokemonId !== id);
+    let updatedTeam = myTeam.filter(pokemon => pokemon.id !== id);
     dispatch({type: UPDATE_TEAM, payload: updatedTeam});
     alert('Removed !');
 
@@ -121,7 +121,7 @@ const Drawer = () => {
                 </div>
               }
               <div style={{marginTop: 16}}>
-                {myTeam.includes(fetchedPokemon.id) ?
+                {myTeam.find(member => member.id === fetchedPokemon.id) ?
                   <CustomButton title={"Remove from my team"} type="danger" onClick={() => handleRemoveFromTeam(fetchedPokemon.id)} block />
                   :
                   <CustomButton title={"Add to my team"} type="success" onClick={() => handleAddToTeam(fetchedPokemon)} block disabled={myTeam.length >= 5} />

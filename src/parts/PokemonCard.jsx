@@ -1,13 +1,13 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {TOGGLE_DRAWER} from '../store/appActions';
 
-const PokemonCard = ({pokemon, myTeam}) => {
+const PokemonCard = ({pokemon}) => {
   const {image, name} = pokemon;
   const dispatch = useDispatch();
+  const myTeam = useSelector(state => state.myTeam);
 
-  const isInMyTeam = myTeam.includes(pokemon.id);
-
+  const isInMyTeam = myTeam.find(member => member.id === pokemon.id);
   const handleClick = () => {
     dispatch({type: TOGGLE_DRAWER, payload: {isDrawerOpen: true, pokemon}});
   };

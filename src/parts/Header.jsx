@@ -11,7 +11,7 @@ const Header = ({myTeam}) => {
   const {pathname} = location;
 
   const handleClick = () => {
-    if (myTeam.length < 1) {
+    if (myTeam.length < 3) {
       return alert("Select at least 3 fighters !");
     }
     if (myTeam.length > 5) {

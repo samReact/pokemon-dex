@@ -12,7 +12,7 @@ const Root = ({children}) => {
 
 
   return (
-    <div>
+    <div style={{minHeight: '100vh'}}>
       <Header myTeam={myTeam} />
       <Drawer />
       {children}
