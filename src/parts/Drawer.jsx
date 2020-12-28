@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {TOGGLE_DRAWER, UPDATE_TEAM} from '../store/appActions';
+import {ADD_TO_TEAM, REMOVE_FROM_TEAM, TOGGLE_DRAWER} from '../store/appActions';
 
 import {useQuery} from "@apollo/client";
 import {POKEMON} from '../gql/queries';
@@ -70,17 +70,17 @@ const Drawer = () => {
     // if (specialAttacks.length < 1 | fastAttacks.length < 1) {
     //   return alert('This pokeman can\'t fight he must has at least 1 fast attack and 1 special attack !!');
     // }
-    let updatedTeam = myTeam;
-    updatedTeam.push(pokemon);
-    dispatch({type: UPDATE_TEAM, payload: updatedTeam});
+    // let updatedTeam = myTeam;
+    // updatedTeam.push(pokemon);
+    dispatch({type: ADD_TO_TEAM, payload: pokemon});
     alert('Added !');
   };
 
   const handleRemoveFromTeam = (id) => {
-    let updatedTeam = myTeam.filter(pokemon => pokemon.id !== id);
-    dispatch({type: UPDATE_TEAM, payload: updatedTeam});
+    let updatedTeam = new Array(myTeam);
+    updatedTeam.filter(pokemon => pokemon.id !== id);
+    dispatch({type: REMOVE_FROM_TEAM, payload: updatedTeam});
     alert('Removed !');
-
   };
 
   return (

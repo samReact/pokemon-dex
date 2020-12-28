@@ -1,10 +1,11 @@
-import {ADD_POKEMONS, TOGGLE_DRAWER, UPDATE_TEAM} from './appActions';
+import {ADD_POKEMONS, ADD_TO_TEAM, REMOVE_FROM_TEAM, TOGGLE_DRAWER} from './appActions';
 
 const initialState = {
   pokemons: [],
   isDrawerOpen: false,
   pokemon: {},
-  myTeam: []
+  myTeam: [],
+  computerTeam: []
 };
 
 export default function appReducer(state = initialState, action) {
@@ -20,7 +21,12 @@ export default function appReducer(state = initialState, action) {
         pokemon: action.payload.pokemon,
         isDrawerOpen: action.payload.isDrawerOpen
       };
-    case UPDATE_TEAM:
+    case ADD_TO_TEAM:
+      return {
+        ...state,
+        myTeam: [...state.myTeam, action.payload]
+      };
+    case REMOVE_FROM_TEAM:
       return {
         ...state,
         myTeam: action.payload
