@@ -1,7 +1,7 @@
-.game {
+.fight {
   display: grid;
   grid-template-columns: 1fr 200px 1fr;
-  grid-template-rows: 50%;
+  grid-template-rows: 100%;
 
   align-content: center;
   column-gap: 16px;
@@ -14,26 +14,23 @@
     justify-self: center;
     align-self: center;
   }
-  .game-team-container {
+  .fight-team-container {
     justify-self: center;
     align-self: center;
-    > h2 {
-      font-style: italic;
-      text-align: center;
-    }
-    .game-images-container {
+
+    .fight-images-container {
       display: flex;
       width: 100%;
       justify-content: center;
       flex-wrap: wrap;
     }
-    .game-image-background {
+    .fight-image-background {
       background-color: $white;
       justify-content: center;
       flex-direction: column;
       align-items: center;
       display: flex;
-      height: 80px;
+      height: 100%;
       border-radius: 16px;
       padding: 12px;
       > img {
@@ -58,11 +55,13 @@
 }
 
 @media screen and (max-width: map-get($breakpoints, "md")) {
-  .game {
+  .fight {
     grid-template-columns: 1fr;
     height: 100%;
-    grid-template-rows: 1fr 200px 1fr;
-    // align-content: center;
+    grid-template-rows: 1fr 1fr 1fr;
+    .fight-team-container {
+      width: 300px;
+    }
     > img {
       grid-column-start: 1;
     }

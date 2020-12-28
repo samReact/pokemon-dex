@@ -9,6 +9,8 @@ import { ADD_POKEMONS } from "./store/appActions";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Game from "./pages/Game";
+import Root from "./parts/Root";
+import Fight from "./pages/Fight";
 
 function App() {
   const { loading, error, data } = useQuery(POKEMONS);
@@ -22,14 +24,19 @@ function App() {
 
   return (
     <Router>
-      <Switch>
-        <Route path="/game">
-          <Game />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
+      <Root>
+        <Switch>
+          <Route path="/fight">
+            <Fight />
+          </Route>
+          <Route path="/game">
+            <Game />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Root>
     </Router>
   );
 }

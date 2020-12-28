@@ -24,9 +24,8 @@ const Header = ({myTeam}) => {
     <div className='header content-padding'>
       <img src={logo} alt="pokemon logo" className="header-logo" onClick={() => history.push("/")} />
       {
-        pathname !== '/game' &&
+        pathname === '/' &&
         <CustomButton title='Fight !' pulse onClick={handleClick} />
-
       }
     </div>
   );

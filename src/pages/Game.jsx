@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 
-import Root from '../parts/Root';
 import vsLogo from '../assets/VS_logo.png';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {ADD_COMPUTER_TEAM} from '../store/appActions';
 import CustomButton from '../components/CustomButton';
+import {useHistory} from 'react-router-dom';
 
 
 const Game = () => {
@@ -13,6 +13,7 @@ const Game = () => {
   const {myTeam, pokemons, computerTeam} = state;
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
 
 
@@ -20,7 +21,7 @@ const Game = () => {
     const computerTeam = [];
     for (let i = 0; i < myTeam.length; i++) {
       let item = pokemons[Math.floor(Math.random() * pokemons.length)];
-      computerTeam.push(item);
+      computerTeam.push({...item, played: false});
     }
     dispatch({type: ADD_COMPUTER_TEAM, payload: computerTeam});
   };
@@ -45,20 +46,18 @@ const Game = () => {
 
 
   return (
-    <Root>
-      <div className='game content-padding'>
-        <div className="game-team-container">
-          <h2>My Team</h2>
-          <RenderListMembers datas={myTeam} />
-        </div>
-        <img src={vsLogo} alt="vs logo" />
-        <div className="game-team-container">
-          <h2>Computer's Team</h2>
-          <RenderListMembers datas={computerTeam} />
-        </div>
-        <CustomButton title={"Start"} pulse />
+    <div className='game content-padding'>
+      <div className="game-team-container">
+        <h2>My Team</h2>
+        <RenderListMembers datas={myTeam} />
       </div>
-    </Root>
+      <img src={vsLogo} alt="vs logo" />
+      <div className="game-team-container">
+        <h2>Computer's Team</h2>
+        <RenderListMembers datas={computerTeam} />
+      </div>
+      <CustomButton title={"Start"} pulse onClick={() => history.push("/fight")} />
+    </div>
   );
 };
 

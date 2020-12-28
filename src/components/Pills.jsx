@@ -3,9 +3,9 @@ import React from 'react';
 
 const Pills = (props) => {
 
-  const {title} = props;
+  const {title, type} = props;
   return (
-    <span className={`pills -${title}`}>{title}</span>
+    <span className={`pills -${type}`}>{title}</span>
   );
 };
 

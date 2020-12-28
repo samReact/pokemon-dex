@@ -52,7 +52,7 @@ const Drawer = () => {
             loading ?
               <p>Loading...</p>
               :
-              datas.map(weakness => <Pills key={weakness} title={weakness} />)
+              datas.map(weakness => <Pills key={weakness} title={weakness} type={weakness} />)
           }
         </div>
       </div>
@@ -72,13 +72,13 @@ const Drawer = () => {
     // }
     // let updatedTeam = myTeam;
     // updatedTeam.push(pokemon);
-    dispatch({type: ADD_TO_TEAM, payload: pokemon});
+    dispatch({type: ADD_TO_TEAM, payload: {...pokemon, played: false}});
     alert('Added !');
   };
 
   const handleRemoveFromTeam = (id) => {
-    let updatedTeam = new Array(myTeam);
-    updatedTeam.filter(pokemon => pokemon.id !== id);
+    let updatedTeam = myTeam;
+    updatedTeam = updatedTeam.filter(pokemon => pokemon.id !== id);
     dispatch({type: REMOVE_FROM_TEAM, payload: updatedTeam});
     alert('Removed !');
   };
