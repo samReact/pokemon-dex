@@ -75,22 +75,18 @@ const Fight = () => {
     const attack = (attacks) => {
       attacks.fast.map(attack => {
         if (attacks === computerAttacks ? userResistant.includes(attack.type) : computerResistant.includes(attack.type)) {
-          console.log('resist !');
           return attacks === computerAttacks ? damageUser : damageComputer;
         }
         if (attacks === computerAttacks ? userWeaknesses.includes(attack.type) : computerWeaknesses.includes(attack.type)) {
-          console.log('week !');
           attacks === computerAttacks ? damageUser = damageUser + attack.damage : damageComputer = damageComputer + attack.damage;
         }
         return attacks === computerAttacks ? damageUser : damageComputer;
       });
       attacks.special.map(attack => {
         if (attacks === computerAttacks ? userResistant.includes(attack.type) : computerResistant.includes(attack.type)) {
-          console.log('resist !');
           return attacks === computerAttacks ? damageUser : damageComputer;
         }
         if (attacks === computerAttacks ? userWeaknesses.includes(attack.type) : computerWeaknesses.includes(attack.type)) {
-          console.log('week !');
           attacks === computerAttacks ? damageUser = damageUser + attack.damage : damageComputer = damageComputer + attack.damage;
         }
         return attacks === computerAttacks ? damageUser : damageComputer;
@@ -108,15 +104,12 @@ const Fight = () => {
 
 
     if (damageUser === damageComputer) {
-      console.log('no winner');
       notify("Draw no winner !");
     }
     if (damageUser < damageComputer) {
-      console.log('you winner');
       notify("You win !");
     }
     if (damageUser > damageComputer) {
-      console.log('computer winner');
       notify("Computer win !");
     }
   };
