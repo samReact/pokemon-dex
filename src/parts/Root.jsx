@@ -1,5 +1,8 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
+import {ToastContainer} from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import Header from '../parts/Header';
 
@@ -13,6 +16,7 @@ const Root = ({children}) => {
   return (
     <div style={{minHeight: '100vh'}}>
       <Header myTeam={myTeam} />
+      <ToastContainer />
       {children}
     </div>
   );

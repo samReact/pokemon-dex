@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {ADD_TO_TEAM, REMOVE_FROM_TEAM, TOGGLE_DRAWER} from '../store/appActions';
+import {ADD_USER_TEAM, REMOVE_FROM_TEAM, TOGGLE_DRAWER} from '../store/appActions';
+import {toast} from 'react-toastify';
 
 import {useQuery} from "@apollo/client";
 import {POKEMON} from '../gql/queries';
@@ -13,6 +14,15 @@ const Drawer = () => {
   const {isDrawerOpen, pokemon, pokemons, myTeam} = state;
 
   const [evolutionsPokemon, setEvolutionsPokemon] = useState([]);
+
+  const notify = (text) => {
+    toast.info(text, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+    });
+  };
 
   const {loading, error, data} = useQuery(POKEMON, {
     variables: {id: pokemon.id},
@@ -60,27 +70,16 @@ const Drawer = () => {
   };
 
   const handleAddToTeam = (pokemon) => {
-    // const attacks = pokemon.attacks;
-    // const specialAttacks = attacks.special;
-    // const fastAttacks = attacks.fast;
-    // const attacksNumber = fastAttacks.length + specialAttacks.length;
-    // if (attacksNumber > 4) {
-    //   return alert('This pokeman can\'t fight he has more than 4 attacks !!');
-    // }
-    // if (specialAttacks.length < 1 | fastAttacks.length < 1) {
-    //   return alert('This pokeman can\'t fight he must has at least 1 fast attack and 1 special attack !!');
-    // }
-    // let updatedTeam = myTeam;
-    // updatedTeam.push(pokemon);
-    dispatch({type: ADD_TO_TEAM, payload: {...pokemon, played: false}});
-    alert('Added !');
+    const filteredmyTeam = myTeam.filter(member => member.id !== pokemon.id);
+    dispatch({type: ADD_USER_TEAM, payload: [...filteredmyTeam, {...pokemon, played: false}]});
+    notify('Added !');
   };
 
   const handleRemoveFromTeam = (id) => {
     let updatedTeam = myTeam;
     updatedTeam = updatedTeam.filter(pokemon => pokemon.id !== id);
     dispatch({type: REMOVE_FROM_TEAM, payload: updatedTeam});
-    alert('Removed !');
+    notify('Removed !');
   };
 
   return (

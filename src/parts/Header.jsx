@@ -1,5 +1,7 @@
 import React from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
+import {toast} from 'react-toastify';
+
 
 
 import logo from '../assets/logo-pokemon.png';
@@ -10,12 +12,21 @@ const Header = ({myTeam}) => {
   let location = useLocation();
   const {pathname} = location;
 
+  const notify = (text) => {
+    toast.info(text, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+    });
+  };
+
   const handleClick = () => {
     if (myTeam.length < 3) {
-      return alert("Select at least 3 fighters !");
+      return notify("Select at least 3 fighters !");
     }
     if (myTeam.length > 5) {
-      return alert("Maximum 5 fighters !");
+      return notify("Maximum 5 fighters !");
     }
     history.push("/game");
   };
