@@ -42,6 +42,10 @@
       }
     }
   }
+  > button {
+    grid-column-start: 2;
+    margin: 20px 0;
+  }
 }
 
 @keyframes example {
@@ -60,6 +64,9 @@
     grid-template-rows: 1fr 200px 1fr;
     // align-content: center;
     > img {
+      grid-column-start: 1;
+    }
+    > button {
       grid-column-start: 1;
     }
   }

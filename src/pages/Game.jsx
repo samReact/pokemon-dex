@@ -1,32 +1,35 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 
 import Root from '../parts/Root';
 import vsLogo from '../assets/VS_logo.png';
 
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {ADD_COMPUTER_TEAM} from '../store/appActions';
+import CustomButton from '../components/CustomButton';
 
 
 const Game = () => {
-  const [computerTeam, setComputerTeam] = useState([]);
-  const myTeam = useSelector(state => state.myTeam);
-  const allPokemons = useSelector(state => state.pokemons);
+  const state = useSelector(state => state);
+  const {myTeam, pokemons, computerTeam} = state;
+
+  const dispatch = useDispatch();
 
 
 
   const getComputerTeam = () => {
     const computerTeam = [];
     for (let i = 0; i < myTeam.length; i++) {
-      let item = allPokemons[Math.floor(Math.random() * allPokemons.length)];
+      let item = pokemons[Math.floor(Math.random() * pokemons.length)];
       computerTeam.push(item);
     }
-    setComputerTeam(computerTeam);
+    dispatch({type: ADD_COMPUTER_TEAM, payload: computerTeam});
   };
 
   useEffect(() => {
-    if (myTeam.length) {
+    if (myTeam.length && pokemons.length) {
       getComputerTeam();
     }
-  }, [myTeam]);
+  }, [myTeam, pokemons]);
 
   const RenderListMembers = ({datas}) =>
     <div className="game-images-container">
@@ -53,6 +56,7 @@ const Game = () => {
           <h2>Computer's Team</h2>
           <RenderListMembers datas={computerTeam} />
         </div>
+        <CustomButton title={"Start"} pulse />
       </div>
     </Root>
   );
