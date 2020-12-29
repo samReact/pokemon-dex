@@ -10,6 +10,7 @@ import CustomButton from '../components/CustomButton';
 import Pills from '../components/Pills';
 import {ADD_COMPUTER_TEAM, ADD_USER_TEAM, UPDATE_GAME_SCORE} from '../store/appActions';
 import {useHistory} from 'react-router-dom';
+import HealthBar from '../components/HealthBar';
 
 
 
@@ -146,6 +147,7 @@ const Fight = () => {
           :
           <>
             <div className="fight-team-container">
+              <HealthBar completed={100} />
               <RenderFighter fighter={selectMyTeamFighter} />
               <div>
                 <RenderPills title={'Fast Attacks'} datas={selectMyTeamFighter.attacks.fast} />
@@ -154,6 +156,7 @@ const Fight = () => {
             </div>
             <img src={vsLogo} alt="vs logo" />
             <div className="fight-team-container">
+              <HealthBar completed={50} />
               <RenderFighter fighter={selectComputerFighter} />
               <div>
                 <RenderPills title={'Fast Attacks'} datas={selectComputerFighter.attacks.fast} />

@@ -1,0 +1,18 @@
+.healthbar-container {
+  height: 20px;
+  width: 100%;
+  background-color: #e0e0de;
+  border-radius: 50px;
+  margin-bottom: 16px;
+
+  .healthbar-fill {
+    border-radius: inherit;
+    text-align: right;
+    height: 100%;
+    .healthbar-label {
+      padding: 5px;
+      color: $white;
+      font-weight: bold;
+    }
+  }
+}
