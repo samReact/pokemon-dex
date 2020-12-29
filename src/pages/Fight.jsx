@@ -9,7 +9,7 @@ import {useQuery} from '@apollo/client';
 import vsLogo from '../assets/VS_logo.png';
 import CustomButton from '../components/CustomButton';
 import Pills from '../components/Pills';
-import {ADD_COMPUTER_TEAM, ADD_USER_TEAM, UPDATE_GAME_SCORE} from '../store/appActions';
+import {ADD_COMPUTER_TEAM, ADD_USER_TEAM, UPDATE_GAME_SCORE} from '../store/actions/appActions';
 import {useHistory} from 'react-router-dom';
 import HealthBar from '../components/HealthBar';
 
@@ -20,7 +20,7 @@ const Fight = () => {
 
   const [isFighting, setIsFighting] = useState(false);
 
-  const state = useSelector(state => state);
+  const state = useSelector(state => state.app);
   const {myTeam, computerTeam, userDamage, computerDamage} = state;
 
   const dispatch = useDispatch();

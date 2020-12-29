@@ -8,7 +8,7 @@ import Header from '../parts/Header';
 
 const Root = ({children}) => {
 
-  const state = useSelector(state => state);
+  const state = useSelector(state => state.app);
   const {myTeam} = state;
 
 

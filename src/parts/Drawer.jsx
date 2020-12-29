@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {ADD_USER_TEAM, REMOVE_FROM_TEAM, TOGGLE_DRAWER} from '../store/appActions';
+import {ADD_USER_TEAM, REMOVE_FROM_TEAM, TOGGLE_DRAWER} from '../store/actions/appActions';
 import {toast} from 'react-toastify';
 
 import {useQuery} from "@apollo/client";
@@ -10,7 +10,7 @@ import CustomButton from '../components/CustomButton';
 
 const Drawer = () => {
   const dispatch = useDispatch();
-  const state = useSelector(state => state);
+  const state = useSelector(state => state.app);
   const {isDrawerOpen, pokemon, pokemons, myTeam} = state;
 
   const [evolutionsPokemon, setEvolutionsPokemon] = useState([]);

@@ -7,7 +7,7 @@ import PokemonCard from '../parts/PokemonCard';
 
 const Home = () => {
 
-  const state = useSelector(state => state);
+  const state = useSelector(state => state.app);
   const allPokemons = state.pokemons;
   const {myTeam} = state;
 

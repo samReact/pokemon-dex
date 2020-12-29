@@ -1,11 +1,11 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {TOGGLE_DRAWER} from '../store/appActions';
+import {TOGGLE_DRAWER} from '../store/actions/appActions';
 
 const PokemonCard = ({pokemon}) => {
   const {image, name} = pokemon;
   const dispatch = useDispatch();
-  const myTeam = useSelector(state => state.myTeam);
+  const myTeam = useSelector(state => state.app.myTeam);
 
   const isInMyTeam = myTeam.find(member => member.id === pokemon.id);
   const handleClick = () => {

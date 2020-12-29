@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import { POKEMONS } from "./gql/queries";
 //global state
 import { useDispatch } from "react-redux";
-import { ADD_POKEMONS } from "./store/appActions";
+import { ADD_POKEMONS } from "./store/actions/appActions";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 

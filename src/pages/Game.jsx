@@ -5,13 +5,13 @@ import {toast} from 'react-toastify';
 import vsLogo from '../assets/VS_logo.png';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {ADD_COMPUTER_TEAM, RESET_GAME} from '../store/appActions';
+import {ADD_COMPUTER_TEAM, RESET_GAME} from '../store/actions/appActions';
 import CustomButton from '../components/CustomButton';
 import {useHistory} from 'react-router-dom';
 
 
 const Game = () => {
-  const state = useSelector(state => state);
+  const state = useSelector(state => state.app);
   const {myTeam, pokemons, computerTeam, userDamage, computerDamage, played} = state;
 
   const dispatch = useDispatch();

@@ -1,4 +1,12 @@
-import {ADD_COMPUTER_TEAM, ADD_POKEMONS, ADD_USER_TEAM, REMOVE_FROM_TEAM, RESET_GAME, TOGGLE_DRAWER, UPDATE_GAME_SCORE} from './appActions';
+import {
+  ADD_COMPUTER_TEAM,
+  ADD_POKEMONS,
+  ADD_USER_TEAM,
+  REMOVE_FROM_TEAM,
+  RESET_GAME,
+  TOGGLE_DRAWER,
+  UPDATE_GAME_SCORE,
+} from "../actions/appActions";
 
 const initialState = {
   pokemons: [],
@@ -8,7 +16,7 @@ const initialState = {
   computerTeam: [],
   computerDamage: 0,
   userDamage: 0,
-  played: false
+  played: false,
 };
 
 export default function appReducer(state = initialState, action) {
@@ -16,35 +24,35 @@ export default function appReducer(state = initialState, action) {
     case ADD_POKEMONS:
       return {
         ...state,
-        pokemons: action.payload
+        pokemons: action.payload,
       };
     case TOGGLE_DRAWER:
       return {
         ...state,
         pokemon: action.payload.pokemon,
-        isDrawerOpen: action.payload.isDrawerOpen
+        isDrawerOpen: action.payload.isDrawerOpen,
       };
     case REMOVE_FROM_TEAM:
       return {
         ...state,
-        myTeam: action.payload
+        myTeam: action.payload,
       };
     case ADD_COMPUTER_TEAM:
       return {
         ...state,
-        computerTeam: action.payload
+        computerTeam: action.payload,
       };
     case ADD_USER_TEAM:
       return {
         ...state,
-        myTeam: action.payload
+        myTeam: action.payload,
       };
     case UPDATE_GAME_SCORE:
       return {
         ...state,
         played: true,
         computerDamage: action.payload.computerDamage,
-        userDamage: action.payload.userDamage
+        userDamage: action.payload.userDamage,
       };
     case RESET_GAME:
       return {
