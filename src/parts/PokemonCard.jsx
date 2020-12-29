@@ -5,9 +5,9 @@ import {TOGGLE_DRAWER} from '../store/actions/appActions';
 const PokemonCard = ({pokemon}) => {
   const {image, name} = pokemon;
   const dispatch = useDispatch();
-  const myTeam = useSelector(state => state.app.myTeam);
+  const userTeam = useSelector(state => state.app.userTeam);
 
-  const isInMyTeam = myTeam.find(member => member.id === pokemon.id);
+  const isInMyTeam = userTeam.find(member => member.id === pokemon.id);
   const handleClick = () => {
     dispatch({type: TOGGLE_DRAWER, payload: {isDrawerOpen: true, pokemon}});
   };

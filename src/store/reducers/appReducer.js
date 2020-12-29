@@ -12,7 +12,7 @@ const initialState = {
   pokemons: [],
   isDrawerOpen: false,
   pokemon: {},
-  myTeam: [],
+  userTeam: [],
   computerTeam: [],
   computerDamage: 0,
   userDamage: 0,
@@ -35,7 +35,7 @@ export default function appReducer(state = initialState, action) {
     case REMOVE_FROM_TEAM:
       return {
         ...state,
-        myTeam: action.payload,
+        userTeam: action.payload,
       };
     case ADD_COMPUTER_TEAM:
       return {
@@ -45,7 +45,7 @@ export default function appReducer(state = initialState, action) {
     case ADD_USER_TEAM:
       return {
         ...state,
-        myTeam: action.payload,
+        userTeam: action.payload,
       };
     case UPDATE_GAME_SCORE:
       return {
@@ -60,7 +60,7 @@ export default function appReducer(state = initialState, action) {
         computerDamage: 0,
         userDamage: 0,
         played: false,
-        myTeam: [],
+        userTeam: [],
         computerTeam: [],
       };
     default:

@@ -8,11 +8,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {ADD_COMPUTER_TEAM, RESET_GAME} from '../store/actions/appActions';
 import CustomButton from '../components/CustomButton';
 import {useHistory} from 'react-router-dom';
+import {SET_AVAILABLE_COMPUTER_FIGHTER, SET_AVAILABLE_USER_FIGHTER} from '../store/actions/gameActions';
 
 
 const Game = () => {
   const state = useSelector(state => state.app);
-  const {myTeam, pokemons, computerTeam, userDamage, computerDamage, played} = state;
+  const {userTeam, pokemons, computerTeam, userDamage, computerDamage, played} = state;
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -30,13 +31,16 @@ const Game = () => {
     });
   };
 
-  const getComputerTeam = () => {
+  const setComputerTeam = () => {
     const computerTeam = [];
-    for (let i = 0; i < myTeam.length; i++) {
+    for (let i = 0; i < userTeam.length; i++) {
       let item = pokemons[Math.floor(Math.random() * pokemons.length)];
       computerTeam.push({...item, played: false});
     }
     dispatch({type: ADD_COMPUTER_TEAM, payload: computerTeam});
+    dispatch({type: SET_AVAILABLE_COMPUTER_FIGHTER, payload: computerTeam});
+    dispatch({type: SET_AVAILABLE_USER_FIGHTER, payload: userTeam});
+
   };
 
   const closeGame = () => {
@@ -55,14 +59,14 @@ const Game = () => {
   };
 
   useEffect(() => {
-    if (myTeam.length && pokemons.length && computerTeam.length === 0) {
-      getComputerTeam();
+    if (userTeam.length && pokemons.length && computerTeam.length === 0) {
+      setComputerTeam();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myTeam, pokemons]);
+  }, [userTeam, pokemons]);
 
   useEffect(() => {
-    const availableFighterUser = myTeam.find(elt => elt.played === false);
+    const availableFighterUser = userTeam.find(elt => elt.played === false);
     const availableFighterComputer = computerTeam.find(elt => elt.played === false);
     if (
       played
@@ -72,7 +76,7 @@ const Game = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myTeam, computerTeam]);
+  }, [userTeam, computerTeam]);
 
   const RenderListMembers = ({datas}) =>
     <div className="game-images-container">
@@ -95,7 +99,7 @@ const Game = () => {
       <div className="game-team-container">
         <h2>{userDamage}</h2>
         <h2>My Team</h2>
-        <RenderListMembers datas={myTeam} />
+        <RenderListMembers datas={userTeam} />
       </div>
       <img src={vsLogo} alt="vs logo" />
       <div className="game-team-container">

@@ -21,7 +21,7 @@ const Fight = () => {
   const [isFighting, setIsFighting] = useState(false);
 
   const state = useSelector(state => state.app);
-  const {myTeam, computerTeam, userDamage, computerDamage} = state;
+  const {userTeam, computerTeam, userDamage, computerDamage} = state;
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -46,7 +46,7 @@ const Fight = () => {
   };
 
   let selectComputerFighter = selectFighter(computerTeam) || '';
-  const selectMyTeamFighter = selectFighter(myTeam);
+  const selectMyTeamFighter = selectFighter(userTeam);
 
   const computerFighterId = selectComputerFighter.id;
 
@@ -112,7 +112,7 @@ const Fight = () => {
     attack(computerAttacks);
 
     const filteredComputerTeam = computerTeam.filter(member => member.id !== selectComputerFighter.id);
-    const filteredmyTeam = myTeam.filter(member => member.id !== selectMyTeamFighter.id);
+    const filteredmyTeam = userTeam.filter(member => member.id !== selectMyTeamFighter.id);
 
     dispatch({type: UPDATE_GAME_SCORE, payload: {userDamage: userDamage + damageUser, computerDamage: computerDamage + damageComputer}});
     dispatch({type: ADD_COMPUTER_TEAM, payload: [...filteredComputerTeam, {...selectComputerFighter, played: true}]});

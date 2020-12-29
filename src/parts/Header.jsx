@@ -7,7 +7,7 @@ import {toast} from 'react-toastify';
 import logo from '../assets/logo-pokemon.png';
 import CustomButton from '../components/CustomButton';
 
-const Header = ({myTeam}) => {
+const Header = ({userTeam}) => {
   let history = useHistory();
   let location = useLocation();
   const {pathname} = location;
@@ -22,10 +22,10 @@ const Header = ({myTeam}) => {
   };
 
   const handleClick = () => {
-    if (myTeam.length < 3) {
+    if (userTeam.length < 3) {
       return notify("Select at least 3 fighters !");
     }
-    if (myTeam.length > 5) {
+    if (userTeam.length > 5) {
       return notify("Maximum 5 fighters !");
     }
     history.push("/game");

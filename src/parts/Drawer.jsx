@@ -11,7 +11,7 @@ import CustomButton from '../components/CustomButton';
 const Drawer = () => {
   const dispatch = useDispatch();
   const state = useSelector(state => state.app);
-  const {isDrawerOpen, pokemon, pokemons, myTeam} = state;
+  const {isDrawerOpen, pokemon, pokemons, userTeam} = state;
 
   const [evolutionsPokemon, setEvolutionsPokemon] = useState([]);
 
@@ -70,13 +70,13 @@ const Drawer = () => {
   };
 
   const handleAddToTeam = (pokemon) => {
-    const filteredmyTeam = myTeam.filter(member => member.id !== pokemon.id);
+    const filteredmyTeam = userTeam.filter(member => member.id !== pokemon.id);
     dispatch({type: ADD_USER_TEAM, payload: [...filteredmyTeam, {...pokemon, played: false}]});
     notify('Added !');
   };
 
   const handleRemoveFromTeam = (id) => {
-    let updatedTeam = myTeam;
+    let updatedTeam = userTeam;
     updatedTeam = updatedTeam.filter(pokemon => pokemon.id !== id);
     dispatch({type: REMOVE_FROM_TEAM, payload: updatedTeam});
     notify('Removed !');
@@ -120,10 +120,10 @@ const Drawer = () => {
                 </div>
               }
               <div style={{marginTop: 16}}>
-                {myTeam.find(member => member.id === fetchedPokemon.id) ?
+                {userTeam.find(member => member.id === fetchedPokemon.id) ?
                   <CustomButton title={"Remove from my team"} type="danger" onClick={() => handleRemoveFromTeam(fetchedPokemon.id)} block />
                   :
-                  <CustomButton title={"Add to my team"} type="success" onClick={() => handleAddToTeam(fetchedPokemon)} block disabled={myTeam.length >= 5} />
+                  <CustomButton title={"Add to my team"} type="success" onClick={() => handleAddToTeam(fetchedPokemon)} block disabled={userTeam.length >= 5} />
                 }
               </div>
 

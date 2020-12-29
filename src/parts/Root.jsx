@@ -9,13 +9,13 @@ import Header from '../parts/Header';
 const Root = ({children}) => {
 
   const state = useSelector(state => state.app);
-  const {myTeam} = state;
+  const {userTeam} = state;
 
 
 
   return (
     <div style={{minHeight: '100vh'}}>
-      <Header myTeam={myTeam} />
+      <Header userTeam={userTeam} />
       <ToastContainer />
       {children}
     </div>

@@ -9,7 +9,7 @@ const Home = () => {
 
   const state = useSelector(state => state.app);
   const allPokemons = state.pokemons;
-  const {myTeam} = state;
+  const {userTeam} = state;
 
   const [pokemons, setPokemons] = useState([]);
   const [value, setValue] = useState('');
@@ -43,7 +43,7 @@ const Home = () => {
           {pokemons.length > 0 ?
             pokemons.map(pokemon => {
               return (
-                <PokemonCard key={pokemon.id} pokemon={pokemon} myTeam={myTeam} />
+                <PokemonCard key={pokemon.id} pokemon={pokemon} userTeam={userTeam} />
               );
             })
             :
