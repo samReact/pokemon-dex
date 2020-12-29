@@ -1,5 +1,4 @@
 import {
-  ADD_COMPUTER_TEAM,
   ADD_POKEMONS,
   ADD_USER_TEAM,
   REMOVE_FROM_TEAM,
@@ -13,9 +12,6 @@ const initialState = {
   isDrawerOpen: false,
   pokemon: {},
   userTeam: [],
-  computerTeam: [],
-  computerDamage: 0,
-  userDamage: 0,
   played: false,
 };
 
@@ -36,11 +32,6 @@ export default function appReducer(state = initialState, action) {
       return {
         ...state,
         userTeam: action.payload,
-      };
-    case ADD_COMPUTER_TEAM:
-      return {
-        ...state,
-        computerTeam: action.payload,
       };
     case ADD_USER_TEAM:
       return {

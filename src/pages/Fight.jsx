@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {toast} from 'react-toastify';
 import {HotKeys} from "react-hotkeys";
@@ -8,8 +8,7 @@ import {useQuery} from '@apollo/client';
 
 import vsLogo from '../assets/VS_logo.png';
 import Pills from '../components/Pills';
-import {ADD_COMPUTER_TEAM, ADD_USER_TEAM, UPDATE_GAME_SCORE} from '../store/actions/appActions';
-import {useHistory} from 'react-router-dom';
+import {SET_COMPUTER_HEALTH, SET_COMPUTER_USED_ATTACKS, SET_USER_HEALTH, SET_USER_USED_ATTACKS, TOGGLE_GAME_TURN} from '../store/actions/gameActions';
 import HealthBar from '../components/HealthBar';
 
 
@@ -17,15 +16,19 @@ import HealthBar from '../components/HealthBar';
 
 const Fight = () => {
 
-  const [isFighting, setIsFighting] = useState(false);
-
-  const state = useSelector(state => state.app);
-  const {userTeam, computerTeam, userDamage, computerDamage} = state;
   const gameState = useSelector(state => state.game);
-  const {userHealth, computerHealth} = gameState;
+
+
+  const {userHealth, computerHealth, isUserTurn, availableComputerFighters, availableUserFighters, computerUsedAttacks, userUsedAttacks} = gameState;
 
   const dispatch = useDispatch();
-  const history = useHistory();
+
+  const handlers = {
+    ATTACK_A: () => handleAttack("a"),
+    ATTACK_B: () => handleAttack("b"),
+    ATTACK_C: () => handleAttack("c"),
+    ATTACK_D: () => handleAttack("d"),
+  };
 
   const keyMap = {
     ATTACK_A: "ctrl+a",
@@ -34,20 +37,9 @@ const Fight = () => {
     ATTACK_D: "ctrl+d"
   };
 
-  const handlers = {
-    ATTACK_A: () => console.log('Attack a'),
-    ATTACK_B: () => console.log('Attack b'),
-    ATTACK_C: () => console.log('Attack c'),
-    ATTACK_D: () => console.log('Attack d'),
-  };
 
-
-  const selectFighter = (team) => {
-    return team.find(elt => elt.played === false);
-  };
-
-  let selectComputerFighter = selectFighter(computerTeam) || '';
-  const selectMyTeamFighter = selectFighter(userTeam);
+  let selectComputerFighter = availableComputerFighters[availableComputerFighters.length - 1] || '';
+  const selectUserFighter = availableUserFighters[availableUserFighters.length - 1];
 
   const computerFighterId = selectComputerFighter.id;
 
@@ -65,10 +57,10 @@ const Fight = () => {
   if (data) {
     let fast = [...data.pokemon.attacks.fast];
     let special = [...data.pokemon.attacks.special];
-    let pokemon = {...data.pokemon, attacks: {fast: fast.splice(0, 2), special: special.splice(0, 2)}};
-
+    let attacks = {fast: fast.splice(0, 2), special: special.splice(0, 2)};
+    let pokemon = {...data.pokemon, attacks};
     selectComputerFighter = pokemon;
-  }
+  };
 
   const notify = (text) => {
     toast.info(text, {
@@ -76,63 +68,105 @@ const Fight = () => {
       autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
-      onClose: () => history.push("/game")
     });
   };
 
-  const handleFight = () => {
-    setIsFighting(true);
+  const attack = (type) => {
     let damageUser = 0;
     let damageComputer = 0;
+    let notified = false;
+    let attacks = ["a", "b", "c", "d"];
 
     const computerAttacks = selectComputerFighter.attacks;
     const computerResistant = selectComputerFighter.resistant;
     const computerWeaknesses = selectComputerFighter.weaknesses;
 
-    const userAttacks = selectMyTeamFighter.attacks;
-    const userResistant = selectMyTeamFighter.resistant;
-    const userWeaknesses = selectMyTeamFighter.weaknesses;
+    const userAttacks = selectUserFighter.attacks;
+    const userResistant = selectUserFighter.resistant;
+    const userWeaknesses = selectUserFighter.weaknesses;
 
-    const attack = (attacks) => {
-      attacks.fast.map(attack => {
-        if (attacks === computerAttacks ? userResistant.includes(attack.type) : computerResistant.includes(attack.type)) {
-          return attacks === computerAttacks ? damageUser : damageComputer;
-        }
-        if (attacks === computerAttacks ? userWeaknesses.includes(attack.type) : computerWeaknesses.includes(attack.type)) {
-          attacks === computerAttacks ? damageUser = damageUser + attack.damage : damageComputer = damageComputer + attack.damage;
-        }
-        return attacks === computerAttacks ? damageUser : damageComputer;
-      });
-      attacks.special.map(attack => {
-        if (attacks === computerAttacks ? userResistant.includes(attack.type) : computerResistant.includes(attack.type)) {
-          return attacks === computerAttacks ? damageUser : damageComputer;
-        }
-        if (attacks === computerAttacks ? userWeaknesses.includes(attack.type) : computerWeaknesses.includes(attack.type)) {
-          attacks === computerAttacks ? damageUser = damageUser + attack.damage : damageComputer = damageComputer + attack.damage;
-        }
-        return attacks === computerAttacks ? damageUser : damageComputer;
-      });
-    };
-    attack(userAttacks);
-    attack(computerAttacks);
-
-    const filteredComputerTeam = computerTeam.filter(member => member.id !== selectComputerFighter.id);
-    const filteredmyTeam = userTeam.filter(member => member.id !== selectMyTeamFighter.id);
-
-    dispatch({type: UPDATE_GAME_SCORE, payload: {userDamage: userDamage + damageUser, computerDamage: computerDamage + damageComputer}});
-    dispatch({type: ADD_COMPUTER_TEAM, payload: [...filteredComputerTeam, {...selectComputerFighter, played: true}]});
-    dispatch({type: ADD_USER_TEAM, payload: [...filteredmyTeam, {...selectMyTeamFighter, played: true}]});
-
-
-    if (damageUser === damageComputer) {
-      notify("Draw no winner !");
+    let attack;
+    if (type === 'a' && isUserTurn) {
+      if (userUsedAttacks.includes('a')) {
+        return notify("Attack already used !");
+      }
+      attack = userAttacks.fast[0];
     }
-    if (damageUser < damageComputer) {
-      notify("You win !");
+    if (type === 'a' && !isUserTurn) {
+      if (computerUsedAttacks.includes('a')) {
+        return notify("Attack already used !");
+      }
+      attack = computerAttacks.fast[0];
     }
-    if (damageUser > damageComputer) {
-      notify("Computer win !");
+    if (type === 'b' && isUserTurn) {
+      if (userUsedAttacks.includes('b')) {
+        return notify("Attack already used !");
+      }
+      attack = userAttacks.fast[1];
     }
+    if (type === 'b' && !isUserTurn) {
+      if (computerUsedAttacks.includes('b')) {
+        return notify("Attack already used !");
+      }
+      attack = computerAttacks.fast[1];
+    }
+    if (type === 'c' && isUserTurn) {
+      if (userUsedAttacks.includes('c')) {
+        return notify("Attack already used !");
+      }
+      attack = userAttacks.special[0];
+    }
+    if (type === 'c' && !isUserTurn) {
+      if (computerUsedAttacks.includes('c')) {
+        return notify("Attack already used !");
+      }
+      attack = computerAttacks.special[0];
+    }
+    if (type === 'd' && isUserTurn) {
+      if (userUsedAttacks.includes('d')) {
+        return notify("Attack already used !");
+      }
+      attack = userAttacks.special[1];
+    }
+    if (type === 'd' && !isUserTurn) {
+      if (computerUsedAttacks.includes('d')) {
+        return notify("Attack already used !");
+      }
+      attack = computerAttacks.special[1];
+    }
+    if (isUserTurn ? computerResistant.includes(attack.type) : userResistant.includes(attack.type)) {
+      notify("Your adversaire resist !!");
+      notified = true;
+    }
+    if (isUserTurn ? computerWeaknesses.includes(attack.type) : userWeaknesses.includes(attack.type)) {
+      notify("Your adversaire has been touch !!");
+      notified = true;
+      isUserTurn ? damageComputer = damageComputer + attack.damage : damageUser = damageUser + attack.damage;
+    }
+    if (!notified) notify("Attack has no effect !!");
+
+    if (isUserTurn) {
+      dispatch({type: SET_COMPUTER_HEALTH, payload: damageComputer});
+      dispatch({type: SET_USER_USED_ATTACKS, payload: type});
+      dispatch({type: TOGGLE_GAME_TURN});
+      // const attackType = attacks[Math.floor(Math.random() * attacks.length)];
+      // toast.info("Computer turn", {
+      //   position: "top-center",
+      //   autoClose: 2000,
+      //   hideProgressBar: true,
+      //   closeOnClick: true,
+      //   onClose: () => handleAttack(attackType)
+      // });
+
+    } else if (!isUserTurn) {
+      dispatch({type: SET_USER_HEALTH, payload: damageUser});
+      dispatch({type: SET_COMPUTER_USED_ATTACKS, payload: type});
+      dispatch({type: TOGGLE_GAME_TURN});
+    }
+  };
+
+  const handleAttack = (type) => {
+    attack(type);
   };
 
   const RenderFighter = ({fighter}) =>
@@ -162,30 +196,23 @@ const Fight = () => {
   };
 
   return (
-    <HotKeys keyMap={keyMap} handlers={handlers}>
+    <HotKeys keyMap={keyMap} handlers={handlers} allowChanges>
       <div className="fight content-padding">
-        {
-          isFighting ?
-            <p>Fighting...</p>
-            :
-            <>
-              <div className="fight-team-container">
-                <HealthBar completed={userHealth} />
-                <RenderFighter fighter={selectMyTeamFighter} />
-                <div>
-                  <RenderPills title={'Fast Attacks'} datas={selectMyTeamFighter.attacks.fast} />
-                  <RenderPills title={'Special Attacks'} datas={selectMyTeamFighter.attacks.special} />
-                </div>
-              </div>
-              <img src={vsLogo} alt="vs logo" />
-              <div className="fight-team-container">
-                <HealthBar completed={computerHealth} />
-                <RenderFighter fighter={selectComputerFighter} />
-                <RenderPills title={'Fast Attacks'} datas={selectComputerFighter.attacks.fast} />
-                <RenderPills title={'Special Attacks'} datas={selectComputerFighter.attacks.special} />
-              </div>
-            </>
-        }
+        <div className="fight-team-container" style={{opacity: isUserTurn ? 1 : 0.4}}>
+          <HealthBar completed={userHealth} />
+          <RenderFighter fighter={selectUserFighter} />
+          <div>
+            <RenderPills title={'Fast Attacks'} datas={selectUserFighter.attacks.fast} />
+            <RenderPills title={'Special Attacks'} datas={selectUserFighter.attacks.special} />
+          </div>
+        </div>
+        <img src={vsLogo} alt="vs logo" />
+        <div className="fight-team-container" style={{opacity: !isUserTurn ? 1 : 0.4}}>
+          <HealthBar completed={computerHealth} />
+          <RenderFighter fighter={selectComputerFighter} />
+          <RenderPills title={'Fast Attacks'} datas={selectComputerFighter.attacks.fast} />
+          <RenderPills title={'Special Attacks'} datas={selectComputerFighter.attacks.special} />
+        </div>
       </div>
     </HotKeys>
   );
