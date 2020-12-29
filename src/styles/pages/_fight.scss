@@ -33,6 +33,17 @@
         max-height: 100%;
       }
     }
+    .fight-pills-container {
+      display: flex;
+      justify-content: space-between;
+      > div span {
+        display: block;
+        text-align: center;
+        font-size: 12px;
+        margin-top: 8px;
+        font-weight: bold;
+      }
+    }
   }
   > button {
     grid-column-start: 2;

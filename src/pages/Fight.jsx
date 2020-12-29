@@ -7,7 +7,6 @@ import {POKEMON} from '../gql/queries';
 import {useQuery} from '@apollo/client';
 
 import vsLogo from '../assets/VS_logo.png';
-import CustomButton from '../components/CustomButton';
 import Pills from '../components/Pills';
 import {ADD_COMPUTER_TEAM, ADD_USER_TEAM, UPDATE_GAME_SCORE} from '../store/actions/appActions';
 import {useHistory} from 'react-router-dom';
@@ -145,18 +144,20 @@ const Fight = () => {
     </>;
 
   const RenderPills = ({title, datas}) => {
+    const label = title === "Fast Attacks" ? ["a", "b"] : ["c", "d"];
     return (
-      <div className="drawer-pills">
+      <>
         <h5 >{title}</h5>
-        <div className="drawer-pills-container">
+        <div className="fight-pills-container">
           {
             loading ?
               <p>Loading...</p>
               :
-              datas.map(attack => <Pills key={attack.name} title={attack.name} type={attack.type} />)
+              datas.map((attack, i) => <div key={attack.name} ><Pills title={attack.name} type={attack.type} />
+                <span >ctrl+{label[i]}</span></div>)
           }
         </div>
-      </div>
+      </>
     );
   };
 
@@ -180,12 +181,9 @@ const Fight = () => {
               <div className="fight-team-container">
                 <HealthBar completed={computerHealth} />
                 <RenderFighter fighter={selectComputerFighter} />
-                <div>
-                  <RenderPills title={'Fast Attacks'} datas={selectComputerFighter.attacks.fast} />
-                  <RenderPills title={'Special Attacks'} datas={selectComputerFighter.attacks.special} />
-                </div>
+                <RenderPills title={'Fast Attacks'} datas={selectComputerFighter.attacks.fast} />
+                <RenderPills title={'Special Attacks'} datas={selectComputerFighter.attacks.special} />
               </div>
-              <CustomButton title={"Fight !"} pulse onClick={handleFight} />
             </>
         }
       </div>
