@@ -69,8 +69,11 @@ const Drawer = () => {
     );
   };
 
-  const handleAddToTeam = (pokemon) => {
-    const filteredmyTeam = userTeam.filter(member => member.id !== pokemon.id);
+  const handleAddToTeam = () => {
+    const filteredmyTeam = userTeam.filter(member => member.id !== data.pokemon.id);
+    let fast = [...data.pokemon.attacks.fast];
+    let special = [...data.pokemon.attacks.special];
+    let pokemon = {...data.pokemon, attacks: {fast: fast.splice(0, 2), special: special.splice(0, 2)}};
     dispatch({type: ADD_USER_TEAM, payload: [...filteredmyTeam, {...pokemon, played: false}]});
     notify('Added !');
   };

@@ -37,6 +37,7 @@ const Game = () => {
       let item = pokemons[Math.floor(Math.random() * pokemons.length)];
       computerTeam.push({...item, played: false});
     }
+
     dispatch({type: ADD_COMPUTER_TEAM, payload: computerTeam});
     dispatch({type: SET_AVAILABLE_COMPUTER_FIGHTER, payload: computerTeam});
     dispatch({type: SET_AVAILABLE_USER_FIGHTER, payload: userTeam});

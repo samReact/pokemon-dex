@@ -22,6 +22,8 @@ const Fight = () => {
 
   const state = useSelector(state => state.app);
   const {userTeam, computerTeam, userDamage, computerDamage} = state;
+  const gameState = useSelector(state => state.game);
+  const {userHealth, computerHealth} = gameState;
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -62,7 +64,11 @@ const Fight = () => {
   }
 
   if (data) {
-    selectComputerFighter = data.pokemon;
+    let fast = [...data.pokemon.attacks.fast];
+    let special = [...data.pokemon.attacks.special];
+    let pokemon = {...data.pokemon, attacks: {fast: fast.splice(0, 2), special: special.splice(0, 2)}};
+
+    selectComputerFighter = pokemon;
   }
 
   const notify = (text) => {
@@ -163,7 +169,7 @@ const Fight = () => {
             :
             <>
               <div className="fight-team-container">
-                <HealthBar completed={100} />
+                <HealthBar completed={userHealth} />
                 <RenderFighter fighter={selectMyTeamFighter} />
                 <div>
                   <RenderPills title={'Fast Attacks'} datas={selectMyTeamFighter.attacks.fast} />
@@ -172,7 +178,7 @@ const Fight = () => {
               </div>
               <img src={vsLogo} alt="vs logo" />
               <div className="fight-team-container">
-                <HealthBar completed={100} />
+                <HealthBar completed={computerHealth} />
                 <RenderFighter fighter={selectComputerFighter} />
                 <div>
                   <RenderPills title={'Fast Attacks'} datas={selectComputerFighter.attacks.fast} />
