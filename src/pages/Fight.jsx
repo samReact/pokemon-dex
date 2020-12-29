@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {toast} from 'react-toastify';
+import {HotKeys} from "react-hotkeys";
 
 import {POKEMON} from '../gql/queries';
 import {useQuery} from '@apollo/client';
@@ -24,6 +25,20 @@ const Fight = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const keyMap = {
+    ATTACK_A: "ctrl+a",
+    ATTACK_B: "ctrl+b",
+    ATTACK_C: "ctrl+c",
+    ATTACK_D: "ctrl+d"
+  };
+
+  const handlers = {
+    ATTACK_A: () => console.log('Attack a'),
+    ATTACK_B: () => console.log('Attack b'),
+    ATTACK_C: () => console.log('Attack c'),
+    ATTACK_D: () => console.log('Attack d'),
+  };
 
 
   const selectFighter = (team) => {
@@ -140,33 +155,35 @@ const Fight = () => {
   };
 
   return (
-    <div className="fight content-padding">
-      {
-        isFighting ?
-          <p>Fighting...</p>
-          :
-          <>
-            <div className="fight-team-container">
-              <HealthBar completed={100} />
-              <RenderFighter fighter={selectMyTeamFighter} />
-              <div>
-                <RenderPills title={'Fast Attacks'} datas={selectMyTeamFighter.attacks.fast} />
-                <RenderPills title={'Special Attacks'} datas={selectMyTeamFighter.attacks.special} />
+    <HotKeys keyMap={keyMap} handlers={handlers}>
+      <div className="fight content-padding">
+        {
+          isFighting ?
+            <p>Fighting...</p>
+            :
+            <>
+              <div className="fight-team-container">
+                <HealthBar completed={100} />
+                <RenderFighter fighter={selectMyTeamFighter} />
+                <div>
+                  <RenderPills title={'Fast Attacks'} datas={selectMyTeamFighter.attacks.fast} />
+                  <RenderPills title={'Special Attacks'} datas={selectMyTeamFighter.attacks.special} />
+                </div>
               </div>
-            </div>
-            <img src={vsLogo} alt="vs logo" />
-            <div className="fight-team-container">
-              <HealthBar completed={50} />
-              <RenderFighter fighter={selectComputerFighter} />
-              <div>
-                <RenderPills title={'Fast Attacks'} datas={selectComputerFighter.attacks.fast} />
-                <RenderPills title={'Special Attacks'} datas={selectComputerFighter.attacks.special} />
+              <img src={vsLogo} alt="vs logo" />
+              <div className="fight-team-container">
+                <HealthBar completed={100} />
+                <RenderFighter fighter={selectComputerFighter} />
+                <div>
+                  <RenderPills title={'Fast Attacks'} datas={selectComputerFighter.attacks.fast} />
+                  <RenderPills title={'Special Attacks'} datas={selectComputerFighter.attacks.special} />
+                </div>
               </div>
-            </div>
-            <CustomButton title={"Fight !"} pulse onClick={handleFight} />
-          </>
-      }
-    </div>
+              <CustomButton title={"Fight !"} pulse onClick={handleFight} />
+            </>
+        }
+      </div>
+    </HotKeys>
   );
 };
 

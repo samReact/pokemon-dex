@@ -65,3 +65,7 @@
     }
   }
 }
+//react-hotkeys border fix
+div[tabindex="-1"]:focus {
+  outline: 0;
+}
