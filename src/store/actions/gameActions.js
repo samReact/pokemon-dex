@@ -6,3 +6,6 @@ export const SET_USER_USED_ATTACKS = "set.user.used.attacks";
 export const SET_COMPUTER_USED_ATTACKS = "set.computer.used.attacks";
 export const SET_USER_HEALTH = "set.user.health";
 export const SET_COMPUTER_HEALTH = "set.computer.health";
+export const INCREMENT_COMPUTER_SCORE = "increment.computer.score";
+export const INCREMENT_USER_SCORE = "increment.user.score";
+export const NEXT_TURN = "next.turn";

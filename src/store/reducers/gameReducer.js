@@ -6,6 +6,9 @@ import {
   SET_USER_USED_ATTACKS,
   SET_COMPUTER_USED_ATTACKS,
   TOGGLE_GAME_TURN,
+  INCREMENT_COMPUTER_SCORE,
+  INCREMENT_USER_SCORE,
+  NEXT_TURN,
 } from "../actions/gameActions";
 
 const initialState = {
@@ -16,6 +19,8 @@ const initialState = {
   isUserTurn: true,
   computerUsedAttacks: [],
   userUsedAttacks: [],
+  computerScore: 0,
+  userScore: 0,
 };
 
 export default function appReducer(state = initialState, action) {
@@ -58,6 +63,27 @@ export default function appReducer(state = initialState, action) {
       return {
         ...state,
         computerUsedAttacks: updatedComputerUsedAttacks,
+      };
+    case INCREMENT_COMPUTER_SCORE:
+      return {
+        ...state,
+        computerScore: state.computerScore + 1,
+      };
+    case INCREMENT_USER_SCORE:
+      return {
+        ...state,
+        userScore: state.userScore + 1,
+      };
+    case NEXT_TURN:
+      const updatedComputerFighters = state.availableComputerFighters;
+      updatedComputerFighters.pop();
+
+      const updatedUserFighters = state.availableUserFighters;
+      updatedUserFighters.pop();
+      return {
+        ...state,
+        availableComputerFighters: updatedComputerFighters,
+        availableUserFighters: updatedUserFighters,
       };
     default:
       return state;

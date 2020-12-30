@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 
@@ -10,6 +11,10 @@ import CustomButton from '../components/CustomButton';
 const Header = ({userTeam}) => {
   let history = useHistory();
   let location = useLocation();
+
+  const gameState = useSelector(state => state.game);
+  const {userScore, computerScore} = gameState;
+
   const {pathname} = location;
 
   const notify = (text) => {
@@ -37,6 +42,13 @@ const Header = ({userTeam}) => {
       {
         pathname === '/' &&
         <CustomButton title='Fight !' pulse onClick={handleClick} />
+      }
+      {
+        pathname === '/fight' &&
+        <div>
+          <span style={{color: "#fff"}}>You: {userScore}</span>
+          <span style={{color: "#fff"}}> computer: {computerScore}</span>
+        </div>
       }
     </div>
   );

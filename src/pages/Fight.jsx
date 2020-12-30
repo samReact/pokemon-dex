@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {toast} from 'react-toastify';
 import {HotKeys} from "react-hotkeys";
@@ -8,7 +8,7 @@ import {useQuery} from '@apollo/client';
 
 import vsLogo from '../assets/VS_logo.png';
 import Pills from '../components/Pills';
-import {SET_COMPUTER_HEALTH, SET_COMPUTER_USED_ATTACKS, SET_USER_HEALTH, SET_USER_USED_ATTACKS, TOGGLE_GAME_TURN} from '../store/actions/gameActions';
+import {INCREMENT_COMPUTER_SCORE, INCREMENT_USER_SCORE, NEXT_TURN, SET_COMPUTER_HEALTH, SET_COMPUTER_USED_ATTACKS, SET_USER_HEALTH, SET_USER_USED_ATTACKS, TOGGLE_GAME_TURN} from '../store/actions/gameActions';
 import HealthBar from '../components/HealthBar';
 
 
@@ -37,6 +37,53 @@ const Fight = () => {
     ATTACK_D: "ctrl+d"
   };
 
+  const notify = (text, position, duration, type, action) => {
+    toast(text, {
+      position: position,
+      autoClose: duration || 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      type: type || "info",
+      onClose: action === 'next' ? () => {
+        dispatch({type: NEXT_TURN});
+      } : () => { }
+    });
+  };
+
+  useEffect(() => {
+    let message;
+    if (isUserTurn && userUsedAttacks.length === 4) {
+      if (userHealth < computerHealth) {
+        dispatch({type: INCREMENT_COMPUTER_SCORE});
+        message = "You loose";
+      }
+      if (userHealth === computerHealth) {
+        message = "No winner ! ";
+      }
+      else {
+        message = "You win !";
+        dispatch({type: INCREMENT_USER_SCORE});
+      }
+      return notify(message, "top-center", 5000, "info", 'next');
+    }
+
+    if (!isUserTurn && computerUsedAttacks.length === 4) {
+      if (userHealth < computerHealth) {
+        dispatch({type: INCREMENT_COMPUTER_SCORE});
+        message = "You loose";
+      }
+      if (userHealth === computerHealth) {
+        message = "No winner ! ";
+      }
+      else {
+        dispatch({type: INCREMENT_USER_SCORE});
+        message = "You win !";
+      }
+      return notify(message, "top-center", 5000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isUserTurn]);
+
 
   let selectComputerFighter = availableComputerFighters[availableComputerFighters.length - 1] || '';
   const selectUserFighter = availableUserFighters[availableUserFighters.length - 1];
@@ -62,14 +109,7 @@ const Fight = () => {
     selectComputerFighter = pokemon;
   };
 
-  const notify = (text) => {
-    toast.info(text, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-    });
-  };
+
 
   const attack = (type) => {
     let damageUser = 0;
@@ -85,70 +125,70 @@ const Fight = () => {
     const userResistant = selectUserFighter.resistant;
     const userWeaknesses = selectUserFighter.weaknesses;
 
+
     let attack;
     if (type === 'a' && isUserTurn) {
       if (userUsedAttacks.includes('a')) {
-        return notify("Attack already used !");
+        return notify("Attack already used !", "top-left", 1000, "warning");
       }
       attack = userAttacks.fast[0];
     }
     if (type === 'a' && !isUserTurn) {
       if (computerUsedAttacks.includes('a')) {
-        return notify("Attack already used !");
+        return notify("Attack already used !", "top-right", 1000, "warning");
       }
       attack = computerAttacks.fast[0];
     }
     if (type === 'b' && isUserTurn) {
       if (userUsedAttacks.includes('b')) {
-        return notify("Attack already used !");
+        return notify("Attack already used !", "top-left", 1000, "warning");
       }
       attack = userAttacks.fast[1];
     }
     if (type === 'b' && !isUserTurn) {
       if (computerUsedAttacks.includes('b')) {
-        return notify("Attack already used !");
+        return notify("Attack already used !", "top-right", 1000, "warning");
       }
       attack = computerAttacks.fast[1];
     }
     if (type === 'c' && isUserTurn) {
       if (userUsedAttacks.includes('c')) {
-        return notify("Attack already used !");
+        return notify("Attack already used !", "top-left", 1000, "warning");
       }
       attack = userAttacks.special[0];
     }
     if (type === 'c' && !isUserTurn) {
       if (computerUsedAttacks.includes('c')) {
-        return notify("Attack already used !");
+        return notify("Attack already used !", "top-right", 1000, "warning");
       }
       attack = computerAttacks.special[0];
     }
     if (type === 'd' && isUserTurn) {
       if (userUsedAttacks.includes('d')) {
-        return notify("Attack already used !");
+        return notify("Attack already used !", "top-left", 1000, "warning");
       }
       attack = userAttacks.special[1];
     }
     if (type === 'd' && !isUserTurn) {
       if (computerUsedAttacks.includes('d')) {
-        return notify("Attack already used !");
+        return notify("Attack already used !", "top-right", 1000, "warning");
       }
       attack = computerAttacks.special[1];
     }
     if (isUserTurn ? computerResistant.includes(attack.type) : userResistant.includes(attack.type)) {
-      notify("Your adversaire resist !!");
+      notify("Your adversaire resist !!", "top-center", 1000, "warning");
       notified = true;
     }
     if (isUserTurn ? computerWeaknesses.includes(attack.type) : userWeaknesses.includes(attack.type)) {
-      notify("Your adversaire has been touch !!");
+      notify("Your adversaire has been touch !!", "top-center", 1000, "error");
       notified = true;
       isUserTurn ? damageComputer = damageComputer + attack.damage : damageUser = damageUser + attack.damage;
     }
-    if (!notified) notify("Attack has no effect !!");
+    if (!notified) notify("Attack has no effect !!", "top-center", 1000, "info");
 
     if (isUserTurn) {
       dispatch({type: SET_COMPUTER_HEALTH, payload: damageComputer});
       dispatch({type: SET_USER_USED_ATTACKS, payload: type});
-      dispatch({type: TOGGLE_GAME_TURN});
       // const attackType = attacks[Math.floor(Math.random() * attacks.length)];
       // toast.info("Computer turn", {
       //   position: "top-center",
@@ -161,8 +201,9 @@ const Fight = () => {
     } else if (!isUserTurn) {
       dispatch({type: SET_USER_HEALTH, payload: damageUser});
       dispatch({type: SET_COMPUTER_USED_ATTACKS, payload: type});
-      dispatch({type: TOGGLE_GAME_TURN});
     }
+    dispatch({type: TOGGLE_GAME_TURN});
+
   };
 
   const handleAttack = (type) => {
