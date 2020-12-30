@@ -237,6 +237,7 @@ const Fight = () => {
       }
       attack = computerAttacks.special[1];
     }
+    if (!attack) return notify("Attack not available !", "top-right", 1000, "warning");
     if (isUserTurn ? computerResistant.includes(attack.type) : userResistant.includes(attack.type)) {
       laughSoundActive();
       notify(isUserTurn ? "Your adversaire resist !!" : "Nice you resist to this attack !", "top-center", 1000, "warning");
@@ -249,7 +250,6 @@ const Fight = () => {
       isUserTurn ? damageComputer = damageComputer + attack.damage : damageUser = damageUser + attack.damage;
     }
     if (!notified) notify("Attack has no effect !!", "top-center", 1000, "info");
-
     if (isUserTurn) {
       dispatch({type: SET_COMPUTER_HEALTH, payload: damageComputer});
       dispatch({type: SET_USER_USED_ATTACKS, payload: type});
