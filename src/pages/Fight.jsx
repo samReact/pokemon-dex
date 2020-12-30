@@ -8,8 +8,9 @@ import {useQuery} from '@apollo/client';
 
 import vsLogo from '../assets/VS_logo.png';
 import Pills from '../components/Pills';
-import {INCREMENT_COMPUTER_SCORE, INCREMENT_USER_SCORE, NEXT_TURN, SET_COMPUTER_HEALTH, SET_COMPUTER_USED_ATTACKS, SET_USER_HEALTH, SET_USER_USED_ATTACKS, TOGGLE_GAME_TURN} from '../store/actions/gameActions';
+import {INCREMENT_COMPUTER_SCORE, INCREMENT_USER_SCORE, NEXT_TURN, RESET_GAME, SET_COMPUTER_HEALTH, SET_COMPUTER_USED_ATTACKS, SET_USER_HEALTH, SET_USER_USED_ATTACKS, TOGGLE_GAME_TURN} from '../store/actions/gameActions';
 import HealthBar from '../components/HealthBar';
+import {useHistory} from 'react-router-dom';
 
 
 
@@ -18,8 +19,9 @@ const Fight = () => {
 
   const gameState = useSelector(state => state.game);
 
+  const history = useHistory();
 
-  const {userHealth, computerHealth, isUserTurn, availableComputerFighters, availableUserFighters, computerUsedAttacks, userUsedAttacks} = gameState;
+  const {userHealth, userScore, computerScore, computerHealth, isUserTurn, availableComputerFighters, availableUserFighters, computerUsedAttacks, userUsedAttacks} = gameState;
 
   const dispatch = useDispatch();
 
@@ -44,14 +46,34 @@ const Fight = () => {
       hideProgressBar: true,
       closeOnClick: true,
       type: type || "info",
-      onClose: action === 'next' ? () => {
-        dispatch({type: NEXT_TURN});
-      } : () => { }
+      onClose: () => {
+        switch (action) {
+          case 'next':
+            return dispatch({type: NEXT_TURN});
+          case 'end':
+            dispatch({type: RESET_GAME});
+            return history.push("/");
+          default:
+            return null;
+        }
+      }
     });
   };
 
   useEffect(() => {
+
+  }, [userHealth, computerHealth]);
+
+  useEffect(() => {
     let message;
+    if (userHealth === 0) {
+      dispatch({type: INCREMENT_COMPUTER_SCORE});
+      return notify("Computer Win !", "top-center", 5000, "info", 'next');
+    }
+    if (computerHealth === 0) {
+      dispatch({type: INCREMENT_USER_SCORE});
+      return notify("You Win !", "top-center", 5000, "info", 'next');
+    }
     if (isUserTurn && userUsedAttacks.length === 4) {
       if (userHealth < computerHealth) {
         dispatch({type: INCREMENT_COMPUTER_SCORE});
@@ -60,9 +82,16 @@ const Fight = () => {
       if (userHealth === computerHealth) {
         message = "No winner ! ";
       }
-      else {
+      if (userHealth > computerHealth) {
         message = "You win !";
         dispatch({type: INCREMENT_USER_SCORE});
+      }
+      if (availableUserFighters.length === 1) {
+        let message;
+        if (userScore > computerScore) message = "You win the game !";
+        if (userScore < computerScore) message = "You loose the game !";
+        if (userScore === computerScore) message = "No winner for this game !";
+        return notify(message, "top-center", 5000, "info", 'end');
       }
       return notify(message, "top-center", 5000, "info", 'next');
     }
@@ -79,10 +108,17 @@ const Fight = () => {
         dispatch({type: INCREMENT_USER_SCORE});
         message = "You win !";
       }
-      return notify(message, "top-center", 5000);
+      if (availableComputerFighters.length === 1) {
+        let message;
+        if (userScore > computerScore) message = "You win the game !";
+        if (userScore < computerScore) message = "You loose the game !";
+        if (userScore === computerScore) message = "No winner  !";
+        return notify(message, "top-center", 5000, "info", 'end');
+      }
+      return notify(message, "top-center", 5000, "info", 'next');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUserTurn]);
+  }, [isUserTurn, userHealth, computerHealth]);
 
 
   let selectComputerFighter = availableComputerFighters[availableComputerFighters.length - 1] || '';
@@ -115,7 +151,6 @@ const Fight = () => {
     let damageUser = 0;
     let damageComputer = 0;
     let notified = false;
-    let attacks = ["a", "b", "c", "d"];
 
     const computerAttacks = selectComputerFighter.attacks;
     const computerResistant = selectComputerFighter.resistant;
@@ -176,11 +211,11 @@ const Fight = () => {
       attack = computerAttacks.special[1];
     }
     if (isUserTurn ? computerResistant.includes(attack.type) : userResistant.includes(attack.type)) {
-      notify("Your adversaire resist !!", "top-center", 1000, "warning");
+      notify(isUserTurn ? "Your adversaire resist !!" : "Nice you resist to this attack !", "top-center", 1000, "warning");
       notified = true;
     }
     if (isUserTurn ? computerWeaknesses.includes(attack.type) : userWeaknesses.includes(attack.type)) {
-      notify("Your adversaire has been touch !!", "top-center", 1000, "error");
+      notify(isUserTurn ? "Your adversaire has been touch !!" : "You have been touch !", "top-center", 1000, "error");
       notified = true;
       isUserTurn ? damageComputer = damageComputer + attack.damage : damageUser = damageUser + attack.damage;
     }
@@ -189,14 +224,6 @@ const Fight = () => {
     if (isUserTurn) {
       dispatch({type: SET_COMPUTER_HEALTH, payload: damageComputer});
       dispatch({type: SET_USER_USED_ATTACKS, payload: type});
-      // const attackType = attacks[Math.floor(Math.random() * attacks.length)];
-      // toast.info("Computer turn", {
-      //   position: "top-center",
-      //   autoClose: 2000,
-      //   hideProgressBar: true,
-      //   closeOnClick: true,
-      //   onClose: () => handleAttack(attackType)
-      // });
 
     } else if (!isUserTurn) {
       dispatch({type: SET_USER_HEALTH, payload: damageUser});

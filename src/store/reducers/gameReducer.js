@@ -9,6 +9,7 @@ import {
   INCREMENT_COMPUTER_SCORE,
   INCREMENT_USER_SCORE,
   NEXT_TURN,
+  RESET_GAME,
 } from "../actions/gameActions";
 
 const initialState = {
@@ -41,14 +42,22 @@ export default function appReducer(state = initialState, action) {
         isUserTurn: !state.isUserTurn,
       };
     case SET_USER_HEALTH:
+      let updatedUserHealth = state.userHealth - action.payload;
+      if (updatedUserHealth < 0) {
+        updatedUserHealth = 0;
+      }
       return {
         ...state,
-        userHealth: state.userHealth - action.payload,
+        userHealth: updatedUserHealth,
       };
     case SET_COMPUTER_HEALTH:
+      let updatedComputerHealth = state.computerHealth - action.payload;
+      if (updatedComputerHealth < 0) {
+        updatedComputerHealth = 0;
+      }
       return {
         ...state,
-        computerHealth: state.computerHealth - action.payload,
+        computerHealth: updatedComputerHealth,
       };
     case SET_USER_USED_ATTACKS:
       const updatedUsedAttacks = [...state.userUsedAttacks];
@@ -84,6 +93,24 @@ export default function appReducer(state = initialState, action) {
         ...state,
         availableComputerFighters: updatedComputerFighters,
         availableUserFighters: updatedUserFighters,
+        computerUsedAttacks: [],
+        userUsedAttacks: [],
+        userHealth: 100,
+        computerHealth: 100,
+        isUserTurn: true,
+      };
+    case RESET_GAME:
+      return {
+        ...state,
+        availableUserFighters: [],
+        availableComputerFighters: [],
+        userHealth: 100,
+        computerHealth: 100,
+        isUserTurn: true,
+        computerUsedAttacks: [],
+        userUsedAttacks: [],
+        computerScore: 0,
+        userScore: 0,
       };
     default:
       return state;
