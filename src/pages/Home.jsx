@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import SearchInput from '../components/SearchInput';
 import Drawer from '../parts/Drawer';
 import PokemonCard from '../parts/PokemonCard';
+import {RESET_GAME} from '../store/actions/appActions';
 
 const Home = () => {
 
   const state = useSelector(state => state.app);
+  const dispatch = useDispatch();
+
   const allPokemons = state.pokemons;
   const {userTeam} = state;
 
@@ -17,6 +20,11 @@ const Home = () => {
   useEffect(() => {
     setPokemons(allPokemons);
   }, [allPokemons]);
+
+  useEffect(() => {
+    dispatch({type: RESET_GAME});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = (e) => {
     setValue(e.target.value);

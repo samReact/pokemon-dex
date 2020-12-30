@@ -9,6 +9,10 @@ import {useQuery} from '@apollo/client';
 
 import vsLogo from '../assets/VS_logo.png';
 import attackSound from '../assets/sounds/attack_sound.mp3';
+import laughSound from '../assets/sounds/laugh.mp3';
+import touchedSound from '../assets/sounds/touched.mp3';
+
+
 
 import Pills from '../components/Pills';
 import {INCREMENT_COMPUTER_SCORE, INCREMENT_USER_SCORE, NEXT_TURN, RESET_GAME, SET_COMPUTER_HEALTH, SET_COMPUTER_USED_ATTACKS, SET_USER_HEALTH, SET_USER_USED_ATTACKS, TOGGLE_GAME_TURN} from '../store/actions/gameActions';
@@ -42,10 +46,21 @@ const Fight = () => {
     ATTACK_D: "ctrl+d"
   };
 
-  const [attackActive] = useSound(
+  const [attackSoundActive] = useSound(
     attackSound,
     {volume: 1}
   );
+
+  const [laughSoundActive] = useSound(
+    laughSound,
+    {volume: 1}
+  );
+
+  const [touchedSoundActive] = useSound(
+    touchedSound,
+    {volume: 1}
+  );
+
 
   const notify = (text, position, duration, type, action) => {
     toast(text, {
@@ -80,6 +95,7 @@ const Fight = () => {
     }
     if (computerHealth === 0) {
       dispatch({type: INCREMENT_USER_SCORE});
+      laughSoundActive();
       return notify("You Win !", "top-center", 5000, "info", 'next');
     }
     if (isUserTurn && userUsedAttacks.length === 4) {
@@ -91,6 +107,7 @@ const Fight = () => {
         message = "No winner ! ";
       }
       if (userHealth > computerHealth) {
+        laughSoundActive();
         message = "You win !";
         dispatch({type: INCREMENT_USER_SCORE});
       }
@@ -114,6 +131,7 @@ const Fight = () => {
       }
       else {
         dispatch({type: INCREMENT_USER_SCORE});
+        laughSoundActive();
         message = "You win !";
       }
       if (availableComputerFighters.length === 1) {
@@ -156,7 +174,7 @@ const Fight = () => {
 
 
   const attack = (type) => {
-    attackActive();
+
     let damageUser = 0;
     let damageComputer = 0;
     let notified = false;
@@ -220,10 +238,12 @@ const Fight = () => {
       attack = computerAttacks.special[1];
     }
     if (isUserTurn ? computerResistant.includes(attack.type) : userResistant.includes(attack.type)) {
+      laughSoundActive();
       notify(isUserTurn ? "Your adversaire resist !!" : "Nice you resist to this attack !", "top-center", 1000, "warning");
       notified = true;
     }
     if (isUserTurn ? computerWeaknesses.includes(attack.type) : userWeaknesses.includes(attack.type)) {
+      touchedSoundActive();
       notify(isUserTurn ? "Your adversaire has been touch !!" : "You have been touch !", "top-center", 1000, "error");
       notified = true;
       isUserTurn ? damageComputer = damageComputer + attack.damage : damageUser = damageUser + attack.damage;

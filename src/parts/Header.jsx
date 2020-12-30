@@ -2,9 +2,9 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import useSound from 'use-sound';
 
-
-
+import gameSound from '../assets/sounds/attack_sound.mp3';
 import logo from '../assets/logo-pokemon.png';
 import CustomButton from '../components/CustomButton';
 
@@ -26,6 +26,12 @@ const Header = ({userTeam}) => {
     });
   };
 
+  const [gameSoundActive] = useSound(
+    gameSound,
+    {volume: 1}
+  );
+
+
   const handleClick = () => {
     if (userTeam.length < 3) {
       return notify("Select at least 3 fighters !");
@@ -33,6 +39,7 @@ const Header = ({userTeam}) => {
     if (userTeam.length > 5) {
       return notify("Maximum 5 fighters !");
     }
+    gameSoundActive();
     history.push("/game");
   };
 
@@ -46,11 +53,11 @@ const Header = ({userTeam}) => {
       {
         pathname === '/fight' &&
         <div>
-          <span style={{color: "#fff"}}>You: {userScore}</span>
-          <span style={{color: "#fff"}}> computer: {computerScore}</span>
+          <span style={{color: "#fff", fontSize: 12}}>You: <span style={{color: 'yellow', fontSize: 24, fontWeight: 'bold'}}>{userScore}</span></span>
+          <span style={{color: "#fff", fontSize: 12}}> computer: <span style={{color: 'yellow', fontSize: 24, fontWeight: 'bold'}}>{computerScore}</span></span>
         </div>
       }
-    </div>
+    </div >
   );
 };
 
