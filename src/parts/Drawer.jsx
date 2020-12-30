@@ -2,11 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {ADD_USER_TEAM, REMOVE_FROM_TEAM, TOGGLE_DRAWER} from '../store/actions/appActions';
 import {toast} from 'react-toastify';
+import useSound from 'use-sound';
+
 
 import {useQuery} from "@apollo/client";
 import {POKEMON} from '../gql/queries';
 import Pills from '../components/Pills';
 import CustomButton from '../components/CustomButton';
+import addSound from '../assets/sounds/select.mp3';
+import removeSound from '../assets/sounds/remove.mp3';
 
 const Drawer = () => {
   const dispatch = useDispatch();
@@ -23,6 +27,16 @@ const Drawer = () => {
       closeOnClick: true,
     });
   };
+
+  const [addSoundActive] = useSound(
+    addSound,
+    {volume: 1}
+  );
+
+  const [removeSoundActive] = useSound(
+    removeSound,
+    {volume: 1}
+  );
 
   const {loading, error, data} = useQuery(POKEMON, {
     variables: {id: pokemon.id},
@@ -75,6 +89,7 @@ const Drawer = () => {
     let special = [...data.pokemon.attacks.special];
     let pokemon = {...data.pokemon, attacks: {fast: fast.splice(0, 2), special: special.splice(0, 2)}};
     dispatch({type: ADD_USER_TEAM, payload: [...filteredmyTeam, {...pokemon, played: false}]});
+    addSoundActive();
     notify('Added !');
   };
 
@@ -82,6 +97,7 @@ const Drawer = () => {
     let updatedTeam = userTeam;
     updatedTeam = updatedTeam.filter(pokemon => pokemon.id !== id);
     dispatch({type: REMOVE_FROM_TEAM, payload: updatedTeam});
+    removeSoundActive();
     notify('Removed !');
   };
 

@@ -2,11 +2,14 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {toast} from 'react-toastify';
 import {HotKeys} from "react-hotkeys";
+import useSound from 'use-sound';
 
 import {POKEMON} from '../gql/queries';
 import {useQuery} from '@apollo/client';
 
 import vsLogo from '../assets/VS_logo.png';
+import attackSound from '../assets/sounds/attack_sound.mp3';
+
 import Pills from '../components/Pills';
 import {INCREMENT_COMPUTER_SCORE, INCREMENT_USER_SCORE, NEXT_TURN, RESET_GAME, SET_COMPUTER_HEALTH, SET_COMPUTER_USED_ATTACKS, SET_USER_HEALTH, SET_USER_USED_ATTACKS, TOGGLE_GAME_TURN} from '../store/actions/gameActions';
 import HealthBar from '../components/HealthBar';
@@ -38,6 +41,11 @@ const Fight = () => {
     ATTACK_C: "ctrl+c",
     ATTACK_D: "ctrl+d"
   };
+
+  const [attackActive] = useSound(
+    attackSound,
+    {volume: 1}
+  );
 
   const notify = (text, position, duration, type, action) => {
     toast(text, {
@@ -148,6 +156,7 @@ const Fight = () => {
 
 
   const attack = (type) => {
+    attackActive();
     let damageUser = 0;
     let damageComputer = 0;
     let notified = false;
