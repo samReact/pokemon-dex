@@ -8,7 +8,6 @@ import {POKEMON} from '../gql/queries';
 import {useQuery} from '@apollo/client';
 
 import vsLogo from '../assets/VS_logo.png';
-import attackSound from '../assets/sounds/attack_sound.mp3';
 import laughSound from '../assets/sounds/laugh.mp3';
 import touchedSound from '../assets/sounds/touched.mp3';
 
@@ -45,11 +44,6 @@ const Fight = () => {
     ATTACK_C: "ctrl+c",
     ATTACK_D: "ctrl+d"
   };
-
-  const [attackSoundActive] = useSound(
-    attackSound,
-    {volume: 1}
-  );
 
   const [laughSoundActive] = useSound(
     laughSound,

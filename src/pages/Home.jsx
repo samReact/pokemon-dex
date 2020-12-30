@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import SearchInput from '../components/SearchInput';
 import Drawer from '../parts/Drawer';
 import PokemonCard from '../parts/PokemonCard';
-import {RESET_GAME} from '../store/actions/appActions';
+import {RESET_GAME} from '../store/actions/gameActions';
 
 const Home = () => {
 
